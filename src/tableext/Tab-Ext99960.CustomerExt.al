@@ -41,5 +41,14 @@ tableextension 99960 "Customer Ext" extends Customer
                 "Contract Status" = const(Active)));
             Editable = false;
         }
+        field(99945; "Average Deposit"; Decimal)
+        {
+            Caption = 'Average Deposit';
+            FieldClass = FlowField;
+            CalcFormula = average("Storage Ledger Entry".Amount where(
+                "Customer No." = field("No."),
+                "Entry Type" = const(Deposit)));
+            Editable = false;
+        }
     }
 }

@@ -14,6 +14,11 @@ pageextension 99960 "Customer Card Ext" extends "Customer Card"
                 ApplicationArea = All;
                 ToolTip = 'Specifies the number of active storage units rented by this customer.';
             }
+            field("Average Deposit"; Rec."Average Deposit")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the average deposit amount for this customer''s storage units.';
+            }
         }
         addlast(Invoicing)
         {

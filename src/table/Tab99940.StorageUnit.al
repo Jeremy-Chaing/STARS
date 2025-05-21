@@ -45,6 +45,24 @@ table 99940 "Storage Unit"
             Caption = 'Monthly Rental Fee';
             DataClassification = CustomerContent;
         }
+        field(6; "Total Rental Income"; Decimal)
+        {
+            Caption = 'Total Rental Income';
+            FieldClass = FlowField;
+            CalcFormula = sum("Storage Ledger Entry".Amount where(
+                "Storage Unit No." = field("Storage Unit No."),
+                "Entry Type" = const(Rent)));
+            Editable = false;
+        }
+        field(7; "Current Deposit"; Decimal)
+        {
+            Caption = 'Current Deposit';
+            FieldClass = FlowField;
+            CalcFormula = sum("Storage Ledger Entry".Amount where(
+                "Storage Unit No." = field("Storage Unit No."),
+                "Entry Type" = const(Deposit)));
+            Editable = false;
+        }
     }
 
     keys

@@ -74,8 +74,14 @@ codeunit 99941 "Stor. Jnl. Line-Check Line"
     local procedure CheckEntryTypeValidations(StorageJournalLine: Record "Storage Journal")
     var
         StorageUnit: Record "Storage Unit";
+        Customer: Record Customer;
     begin
         StorageUnit.Get(StorageJournalLine."Storage Unit No.");
+        Customer.Get(StorageJournalLine."Customer No.");
+
+        // Calculate FlowFields for validation
+        StorageUnit.CalcFields("Current Deposit");
+        Customer.CalcFields("Total Deposits", "Total Rental Fees");
 
         case StorageJournalLine."Entry Type" of
             StorageJournalLine."Entry Type"::Deposits:
@@ -84,6 +90,11 @@ codeunit 99941 "Stor. Jnl. Line-Check Line"
                         Error('Deposit amount must be positive.');
                     if StorageJournalLine.Amount > (StorageUnit."Square Footage" * 5) then
                         Error('Deposit amount cannot exceed $5 per square foot.');
+                    // Check if there's already a deposit for this unit
+                    if StorageUnit."Current Deposit" > 0 then
+                        Error('Storage Unit %1 already has a deposit of %2.',
+                            StorageUnit."Storage Unit No.",
+                            StorageUnit."Current Deposit");
                 end;
             StorageJournalLine."Entry Type"::"Return Deposits":
                 begin
@@ -91,11 +102,21 @@ codeunit 99941 "Stor. Jnl. Line-Check Line"
                         Error('Return deposit amount must be negative.');
                     if Abs(StorageJournalLine.Amount) > (StorageUnit."Square Footage" * 5) then
                         Error('Return deposit amount cannot exceed $5 per square foot.');
+                    // Check if there's a deposit to return
+                    if StorageUnit."Current Deposit" <= 0 then
+                        Error('No deposit available to return for Storage Unit %1.',
+                            StorageUnit."Storage Unit No.");
+                    if Abs(StorageJournalLine.Amount) > StorageUnit."Current Deposit" then
+                        Error('Return amount cannot exceed current deposit of %1.',
+                            StorageUnit."Current Deposit");
                 end;
             StorageJournalLine."Entry Type"::"Rental Fees":
                 begin
                     if StorageJournalLine.Amount <= 0 then
                         Error('Rental fee must be positive.');
+                    // Ensure customer has paid deposit before allowing rental fees
+                    if Customer."Total Deposits" <= 0 then
+                        Error('Customer must pay a deposit before being charged rental fees.');
                 end;
         end;
     end;

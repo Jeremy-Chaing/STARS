@@ -39,6 +39,19 @@ page 99940 "Storage Unit Card"
                     ToolTip = 'Specifies the monthly rental fee for this storage unit.';
                 }
             }
+            group(Statistics)
+            {
+                field("Total Rental Income"; Rec."Total Rental Income")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the total rental income received for this storage unit.';
+                }
+                field("Current Deposit"; Rec."Current Deposit")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the current deposit held for this storage unit.';
+                }
+            }
         }
     }
 }
