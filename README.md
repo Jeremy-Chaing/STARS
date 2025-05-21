@@ -91,3 +91,4 @@ Athens U-Store 是一家位於美國喬治亞州的自助倉儲租賃公司，�
 - CustomerCard 上 CheckBox決定要不要自動過帳 jobQueue
 - ProcessOnlyReport 自動過帳(沒有Request Page)
 - 過帳用Transfer Field Function(原生)
+- StorageUnit報表加 Customer欄位

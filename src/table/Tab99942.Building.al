@@ -2,6 +2,8 @@ table 99942 Building
 {
     Caption = 'Building';
     DataClassification = CustomerContent;
+    LookupPageId = "Buildings";
+    DrillDownPageId = "Buildings";
 
     fields
     {
@@ -29,7 +31,7 @@ table 99942 Building
         {
             Caption = 'Activity Exists';
             FieldClass = FlowField;
-            CalcFormula = exist("Storage Ledger Entry" where("Storage Unit No." = field("Building Code")));
+            CalcFormula = exist("Storage Unit" where("Building Identifier" = field("Building Code")));
         }
     }
 

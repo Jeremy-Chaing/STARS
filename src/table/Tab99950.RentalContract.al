@@ -2,6 +2,8 @@ table 99950 "Rental Contract"
 {
     Caption = 'Rental Contract';
     DataClassification = CustomerContent;
+    LookupPageId = "Rental Contract List";
+    DrillDownPageId = "Rental Contract Card";
 
     fields
     {
@@ -47,16 +49,47 @@ table 99950 "Rental Contract"
         {
             Caption = 'Deposit Amount';
             DataClassification = CustomerContent;
+
+            trigger OnValidate()
+            begin
+                TestField("Deposit Amount", "Monthly Rental Fee");  // 押金必須等於一個月租金
+            end;
         }
         field(8; "Contract Status"; Enum "Contract Status")
         {
             Caption = 'Contract Status';
             DataClassification = CustomerContent;
+            InitValue = Active;  // 預設為 Active
         }
         field(9; Description; Text[100])
         {
             Caption = 'Description';
             DataClassification = CustomerContent;
+        }
+        // Statistics fields
+        field(10; "Last Transaction Date"; Date)
+        {
+            Caption = 'Last Transaction Date';
+            DataClassification = CustomerContent;
+            Editable = false;
+        }
+        field(11; "Total Deposits Received"; Decimal)
+        {
+            Caption = 'Total Deposits Received';
+            DataClassification = CustomerContent;
+            Editable = false;
+        }
+        field(12; "Total Deposits Returned"; Decimal)
+        {
+            Caption = 'Total Deposits Returned';
+            DataClassification = CustomerContent;
+            Editable = false;
+        }
+        field(13; "Total Rent Collected"; Decimal)
+        {
+            Caption = 'Total Rent Collected';
+            DataClassification = CustomerContent;
+            Editable = false;
         }
     }
 
@@ -67,4 +100,12 @@ table 99950 "Rental Contract"
             Clustered = true;
         }
     }
+
+    trigger OnInsert()
+    begin
+        TestField("Deposit Amount");  // 確保有填寫押金金額
+        TestField("Monthly Rental Fee");  // 確保有填寫月租金
+        TestField("Start Date");  // 確保有填寫開始日期
+        TestField("End Date");  // 確保有填寫結束日期
+    end;
 }

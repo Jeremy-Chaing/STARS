@@ -2,6 +2,8 @@ table 99944 "Storage Ledger Entry"
 {
     Caption = 'Storage Ledger Entry';
     DataClassification = CustomerContent;
+    LookupPageId = "Storage Ledger Entries";
+    DrillDownPageId = "Storage Ledger Entries";
 
     fields
     {

@@ -2,6 +2,8 @@ table 99940 "Storage Unit"
 {
     Caption = 'Storage Unit';
     DataClassification = CustomerContent;
+    LookupPageId = "Storage Unit List";
+    DrillDownPageId = "Storage Unit Card";
 
     fields
     {
