@@ -46,10 +46,10 @@ codeunit 99941 "Stor. Jnl. Line-Check Line"
 
         if RentalContract."Contract Status" <> RentalContract."Contract Status"::Active then
             Error('Contract %1 is not active.', StorageJournalLine."Contract No.");
-
-        if (StorageJournalLine."Date of Transaction" < RentalContract."Start Date") or
-           (StorageJournalLine."Date of Transaction" > RentalContract."End Date") then
-            Error('Transaction date must be within the contract period.');
+        if (StorageJournalLine."Entry Type" in [StorageJournalLine."Entry Type"::"Rental Fees", StorageJournalLine."Entry Type"::"Return Deposits"]) then
+            if (StorageJournalLine."Date of Transaction" < RentalContract."Start Date") or
+                (StorageJournalLine."Date of Transaction" > RentalContract."End Date") then
+                Error('Transaction date must be within the contract period.');
     end;
 
     local procedure CheckStorageUnit(StorageJournalLine: Record "Storage Journal")

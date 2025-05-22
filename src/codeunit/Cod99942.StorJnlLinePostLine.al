@@ -12,7 +12,6 @@ codeunit 99942 "Stor. Jnl. Line-Post Line"
     procedure RunPostLine(var StorageJournalLine: Record "Storage Journal"): Boolean
     var
         StorageLedgerEntry: Record "Storage Ledger Entry";
-        EntryNo: Integer;
         IsSuccess: Boolean;
     begin
         if not StorageJournalLine.Get(StorageJournalLine."Entry No.") then
@@ -22,13 +21,9 @@ codeunit 99942 "Stor. Jnl. Line-Post Line"
         IsSuccess := false;
         StorageLedgerEntry.LockTable();
 
-        // Get last entry number using MaxValue
-        EntryNo := GetMaxEntryNo() + 1;
-
         // Create ledger entry using TransferFields
         StorageLedgerEntry.Init();
         StorageLedgerEntry.TransferFields(StorageJournalLine, false); // false means don't validate
-        StorageLedgerEntry."Entry No." := EntryNo;
         StorageLedgerEntry."Entry Type" := ConvertEntryType(StorageJournalLine."Entry Type");
         StorageLedgerEntry."Date of Transaction" := WorkDate();
 
@@ -91,12 +86,11 @@ codeunit 99942 "Stor. Jnl. Line-Post Line"
     var
         StorageLedgerEntry: Record "Storage Ledger Entry";
     begin
-        StorageLedgerEntry.SetCurrentKey("Entry No.");
-        if StorageLedgerEntry.IsEmpty then
+        StorageLedgerEntry.Reset();
+        if not StorageLedgerEntry.FindLast() then
             exit(0);
 
-        StorageLedgerEntry.SetRange("Entry No.");
-        exit(StorageLedgerEntry.GetRangeMax("Entry No."));
+        exit(StorageLedgerEntry."Entry No.");
     end;
 
     [IntegrationEvent(false, false)]

@@ -22,14 +22,8 @@ codeunit 99943 "Stor. Jnl. Line-Post Batch"
     local procedure "Code"()
     var
         ErrorOccurred: Boolean;
-        RecordRef: RecordRef;
-        SelectionFilter: Text;
     begin
-        // Get selection filter
-        RecordRef.GetTable(StorageJnlLine);
-        SelectionFilter := RecordRef.GetView();
-
-        if SelectionFilter = '' then
+        if StorageJnlLine.IsEmpty then
             Error(NoSelectErrText);
 
         Window.Open(Text001);
@@ -37,9 +31,6 @@ codeunit 99943 "Stor. Jnl. Line-Post Batch"
         OnBeforePostBatch(StorageJnlLine);
 
         // First check all selected lines
-        StorageJnlLine.Reset();
-        StorageJnlLine.SetView(SelectionFilter);
-
         if not StorageJnlLine.FindSet() then
             exit;
 
@@ -61,9 +52,6 @@ codeunit 99943 "Stor. Jnl. Line-Post Batch"
             LineCount += 1;
             Window.Update(1, LineCount);
         until StorageJnlLine.Next() = 0;
-
-        if not ErrorOccurred then
-            DeletePostedLines(SelectionFilter);
 
         OnAfterPostBatch(StorageJnlLine);
 

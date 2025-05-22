@@ -103,7 +103,6 @@ page 99943 "Storage Journal List"
                     var
                         StorageJournal: Record "Storage Journal";
                         StoragePostBatch: Codeunit "Stor. Jnl. Line-Post Batch";
-                        RecRef: RecordRef;
                         ConfirmQst: Label 'Do you want to post the selected journal lines?';
                         NothingSelectedErr: Label 'Please select the lines you want to post.';
                     begin
@@ -114,9 +113,7 @@ page 99943 "Storage Journal List"
                         if not Confirm(ConfirmQst) then
                             exit;
 
-                        StoragePostBatch.Run(Rec);
-
-                        Message('The selected journal lines have been posted successfully.');
+                        StoragePostBatch.Run(StorageJournal);
                         CurrPage.Update(false);
                     end;
                 }

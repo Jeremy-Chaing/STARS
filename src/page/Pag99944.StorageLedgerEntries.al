@@ -4,7 +4,7 @@ page 99944 "Storage Ledger Entries"
     ApplicationArea = All;
     UsageCategory = History;
     SourceTable = "Storage Ledger Entry";
-    Editable = false;
+    //Editable = false;
     Caption = 'Storage Ledger Entries';
 
     layout

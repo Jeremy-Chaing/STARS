@@ -33,6 +33,12 @@ table 99942 Building
             FieldClass = FlowField;
             CalcFormula = exist("Storage Unit" where("Building Identifier" = field("Building Code")));
         }
+        field(6; "No. Series"; Code[20])
+        {
+            Caption = 'No. Series';
+            Editable = false;
+            TableRelation = "No. Series";
+        }
     }
 
     keys
@@ -42,4 +48,37 @@ table 99942 Building
             Clustered = true;
         }
     }
+
+    var
+        NoSeries: Codeunit "No. Series";
+
+    trigger OnInsert()
+    var
+        Setup: Record "STARS Setup";
+        NoSeriesMgt: Codeunit "NoSeriesManagement";
+    begin
+        if "Building Code" = '' then begin
+            Setup.Get('STARS');
+            Setup.TestField("Building Nos.");
+            "No. Series" := Setup."Building Nos.";
+            "Building Code" := NoSeries.GetNextNo("No. Series", WorkDate());
+        end;
+    end;
+
+    procedure AssistEdit(OldContract: Record "Building"): Boolean
+    var
+        Setup: Record "STARS Setup";
+        NoSeriesMgt: Codeunit "NoSeriesManagement";
+        TempRec: Record "Building";
+    begin
+        TempRec := Rec;
+        Setup.Get('STARS');
+        Setup.TestField("Building Nos.");
+
+        if NoSeries.LookupRelatedNoSeries(Setup."Building Nos.", OldContract."No. Series", TempRec."No. Series") then begin
+            TempRec."Building Code" := NoSeries.GetNextNo(TempRec."No. Series", WorkDate());
+            Rec := TempRec;
+            exit(true);
+        end;
+    end;
 }

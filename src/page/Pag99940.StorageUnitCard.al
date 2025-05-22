@@ -14,6 +14,11 @@ page 99940 "Storage Unit Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the storage unit number.';
+                    trigger OnAssistEdit()
+                    begin
+                        if Rec.AssistEdit(xRec) then
+                            CurrPage.Update();
+                    end;
                 }
                 field("Building Identifier"; Rec."Building Identifier")
                 {

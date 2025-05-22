@@ -50,10 +50,10 @@ table 99950 "Rental Contract"
             Caption = 'Deposit Amount';
             DataClassification = CustomerContent;
 
-            trigger OnValidate()
-            begin
-                TestField("Deposit Amount", "Monthly Rental Fee");  // 押金必須等於一個月租金
-            end;
+            // trigger OnValidate()
+            // begin
+            //     TestField("Deposit Amount", "Monthly Rental Fee");  // 押金必須等於一個月租金
+            // end;
         }
         field(8; "Contract Status"; Enum "Contract Status")
         {
@@ -91,6 +91,18 @@ table 99950 "Rental Contract"
             DataClassification = CustomerContent;
             Editable = false;
         }
+        field(14; "No. Series"; Code[20])
+        {
+            Caption = 'No. Series';
+            Editable = false;
+            TableRelation = "No. Series";
+        }
+        field(15; "Storage Unit Square footage"; Decimal)
+        {
+            Caption = 'Storage Unit Square footage';
+            DataClassification = CustomerContent;
+            Editable = false;
+        }
     }
 
     keys
@@ -101,11 +113,39 @@ table 99950 "Rental Contract"
         }
     }
 
+    var
+        NoSeries: Codeunit "No. Series";
+
+        StorageUnit: Record "Storage Unit";
+
     trigger OnInsert()
+    var
+        Setup: Record "STARS Setup";
+        NoSeriesMgt: Codeunit "NoSeriesManagement";
     begin
-        TestField("Deposit Amount");  // 確保有填寫押金金額
-        TestField("Monthly Rental Fee");  // 確保有填寫月租金
-        TestField("Start Date");  // 確保有填寫開始日期
-        TestField("End Date");  // 確保有填寫結束日期
+        if "Contract No." = '' then begin
+            Setup.Get('STARS');
+            Setup.TestField("Contract Nos.");
+            "No. Series" := Setup."Contract Nos.";
+            "Contract No." := NoSeries.GetNextNo("No. Series", WorkDate());
+        end;
+
+    end;
+
+    procedure AssistEdit(OldContract: Record "Rental Contract"): Boolean
+    var
+        Setup: Record "STARS Setup";
+        NoSeriesMgt: Codeunit "NoSeriesManagement";
+        TempRec: Record "Rental Contract";
+    begin
+        TempRec := Rec;
+        Setup.Get('STARS');
+        Setup.TestField("Contract Nos.");
+
+        if NoSeries.LookupRelatedNoSeries(Setup."Contract Nos.", OldContract."No. Series", TempRec."No. Series") then begin
+            TempRec."Contract No." := NoSeries.GetNextNo(TempRec."No. Series", WorkDate());
+            Rec := TempRec;
+            exit(true);
+        end;
     end;
 }

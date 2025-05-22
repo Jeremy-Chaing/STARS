@@ -17,6 +17,11 @@ page 99942 "Buildings"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the building code.';
+                    trigger OnAssistEdit()
+                    begin
+                        if Rec.AssistEdit(xRec) then
+                            CurrPage.Update();
+                    end;
                 }
                 field(Description; Rec.Description)
                 {

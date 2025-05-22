@@ -3,7 +3,7 @@ table 99940 "Storage Unit"
     Caption = 'Storage Unit';
     DataClassification = CustomerContent;
     LookupPageId = "Storage Unit List";
-    DrillDownPageId = "Storage Unit Card";
+    DrillDownPageId = "Storage Unit List";
 
     fields
     {
@@ -17,17 +17,11 @@ table 99940 "Storage Unit"
             Caption = 'Building Identifier';
             DataClassification = CustomerContent;
             TableRelation = Building."Building Code";
-
-            trigger OnValidate()
-            begin
-                CalcFields("Description");
-            end;
         }
         field(3; Description; Text[100])
         {
             Caption = 'Description';
-            FieldClass = FlowField;
-            CalcFormula = lookup(Building.Description where("Building Code" = field("Building Identifier")));
+
         }
         field(4; "Square Footage"; Decimal)
         {
@@ -44,6 +38,11 @@ table 99940 "Storage Unit"
         {
             Caption = 'Monthly Rental Fee';
             DataClassification = CustomerContent;
+            trigger OnValidate()
+            begin
+                if "Monthly Rental Fee" <= 0 then
+                    Error('Monthly Rental Fee must be a positive number.');
+            end;
         }
         field(6; "Total Rental Income"; Decimal)
         {
@@ -63,6 +62,13 @@ table 99940 "Storage Unit"
                 "Entry Type" = const(Deposit)));
             Editable = false;
         }
+
+        field(8; "No. Series"; Code[20])
+        {
+            Caption = 'No. Series';
+            Editable = false;
+            TableRelation = "No. Series";
+        }
     }
 
     keys
@@ -72,4 +78,36 @@ table 99940 "Storage Unit"
             Clustered = true;
         }
     }
+    var
+        NoSeries: Codeunit "No. Series";
+
+    trigger OnInsert()
+    var
+        Setup: Record "STARS Setup";
+        NoSeriesMgt: Codeunit "NoSeriesManagement";
+    begin
+        if "Storage Unit No." = '' then begin
+            Setup.Get('STARS');
+            Setup.TestField("Storage Unit Nos.");
+            "No. Series" := Setup."Storage Unit Nos.";
+            "Storage Unit No." := NoSeries.GetNextNo("No. Series", WorkDate());
+        end;
+    end;
+
+    procedure AssistEdit(OldContract: Record "Storage Unit"): Boolean
+    var
+        Setup: Record "STARS Setup";
+        NoSeriesMgt: Codeunit "NoSeriesManagement";
+        TempRec: Record "Storage Unit";
+    begin
+        TempRec := Rec;
+        Setup.Get('STARS');
+        Setup.TestField("Storage Unit Nos.");
+
+        if NoSeries.LookupRelatedNoSeries(Setup."Storage Unit Nos.", OldContract."No. Series", TempRec."No. Series") then begin
+            TempRec."Storage Unit No." := NoSeries.GetNextNo(TempRec."No. Series", WorkDate());
+            Rec := TempRec;
+            exit(true);
+        end;
+    end;
 }
