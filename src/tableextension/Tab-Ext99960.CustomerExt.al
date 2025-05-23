@@ -20,7 +20,7 @@ tableextension 99960 "Customer Ext" extends Customer
             FieldClass = FlowField;
             CalcFormula = sum("Storage Ledger Entry".Amount where(
                 "Customer No." = field("No."),
-                "Entry Type" = const(Deposit)));
+                "Entry Type" = const(Deposits)));
             Editable = false;
         }
         field(99943; "Total Rental Fees"; Decimal)
@@ -29,7 +29,7 @@ tableextension 99960 "Customer Ext" extends Customer
             FieldClass = FlowField;
             CalcFormula = sum("Storage Ledger Entry".Amount where(
                 "Customer No." = field("No."),
-                "Entry Type" = const(Rent)));
+                "Entry Type" = const("Rental Fees")));
             Editable = false;
         }
         field(99944; "Active Storage Units"; Integer)
@@ -47,7 +47,7 @@ tableextension 99960 "Customer Ext" extends Customer
             FieldClass = FlowField;
             CalcFormula = average("Storage Ledger Entry".Amount where(
                 "Customer No." = field("No."),
-                "Entry Type" = const(Deposit)));
+                "Entry Type" = const(Deposits)));
             Editable = false;
         }
     }

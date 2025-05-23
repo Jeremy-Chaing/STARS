@@ -13,10 +13,10 @@ page 99942 "Buildings"
         {
             repeater(GroupName)
             {
-                field("Building Code"; Rec."Building Code")
+                field("Building No."; Rec."Building No.")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Specifies the building code.';
+                    ToolTip = 'Specifies the Building No.';
                     trigger OnAssistEdit()
                     begin
                         if Rec.AssistEdit(xRec) then

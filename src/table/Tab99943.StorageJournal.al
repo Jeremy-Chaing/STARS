@@ -44,7 +44,7 @@ table 99943 "Storage Journal"
             Caption = 'Amount';
             DataClassification = CustomerContent;
         }
-        field(8; "Entry Type"; Enum "Storage Journal Entry Type")
+        field(8; "Entry Type"; Enum "Storage Entry Type")
         {
             Caption = 'Entry Type';
             DataClassification = CustomerContent;

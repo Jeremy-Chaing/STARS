@@ -7,9 +7,9 @@ table 99942 Building
 
     fields
     {
-        field(1; "Building Code"; Code[20])
+        field(1; "Building No."; Code[20])
         {
-            Caption = 'Building Code';
+            Caption = 'Building No.';
             DataClassification = CustomerContent;
         }
         field(2; Description; Text[100])
@@ -31,7 +31,7 @@ table 99942 Building
         {
             Caption = 'Activity Exists';
             FieldClass = FlowField;
-            CalcFormula = exist("Storage Unit" where("Building Identifier" = field("Building Code")));
+            CalcFormula = exist("Storage Unit" where("Building No." = field("Building No.")));
         }
         field(6; "No. Series"; Code[20])
         {
@@ -43,7 +43,7 @@ table 99942 Building
 
     keys
     {
-        key(PK; "Building Code")
+        key(PK; "Building No.")
         {
             Clustered = true;
         }
@@ -57,11 +57,11 @@ table 99942 Building
         Setup: Record "STARS Setup";
         NoSeriesMgt: Codeunit "NoSeriesManagement";
     begin
-        if "Building Code" = '' then begin
+        if "Building No." = '' then begin
             Setup.Get('STARS');
             Setup.TestField("Building Nos.");
             "No. Series" := Setup."Building Nos.";
-            "Building Code" := NoSeries.GetNextNo("No. Series", WorkDate());
+            "Building No." := NoSeries.GetNextNo("No. Series", WorkDate());
         end;
     end;
 
@@ -76,7 +76,7 @@ table 99942 Building
         Setup.TestField("Building Nos.");
 
         if NoSeries.LookupRelatedNoSeries(Setup."Building Nos.", OldContract."No. Series", TempRec."No. Series") then begin
-            TempRec."Building Code" := NoSeries.GetNextNo(TempRec."No. Series", WorkDate());
+            TempRec."Building No." := NoSeries.GetNextNo(TempRec."No. Series", WorkDate());
             Rec := TempRec;
             exit(true);
         end;

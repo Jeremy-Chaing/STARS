@@ -20,10 +20,10 @@ page 99940 "Storage Unit Card"
                             CurrPage.Update();
                     end;
                 }
-                field("Building Identifier"; Rec."Building Identifier")
+                field("Building No."; Rec."Building No.")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Specifies the building identifier this storage unit belongs to.';
+                    ToolTip = 'Specifies the Building No. this storage unit belongs to.';
                 }
                 field(Description; Rec.Description)
                 {
@@ -50,11 +50,6 @@ page 99940 "Storage Unit Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the total rental income received for this storage unit.';
-                }
-                field("Current Deposit"; Rec."Current Deposit")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the current deposit held for this storage unit.';
                 }
             }
         }

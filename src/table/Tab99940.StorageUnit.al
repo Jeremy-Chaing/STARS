@@ -12,11 +12,11 @@ table 99940 "Storage Unit"
             Caption = 'Storage Unit No.';
             DataClassification = CustomerContent;
         }
-        field(2; "Building Identifier"; Code[20])
+        field(2; "Building No."; Code[20])
         {
-            Caption = 'Building Identifier';
+            Caption = 'Building No.';
             DataClassification = CustomerContent;
-            TableRelation = Building."Building Code";
+            TableRelation = Building."Building No." where(Status = filter(Active));
         }
         field(3; Description; Text[100])
         {
@@ -50,20 +50,10 @@ table 99940 "Storage Unit"
             FieldClass = FlowField;
             CalcFormula = sum("Storage Ledger Entry".Amount where(
                 "Storage Unit No." = field("Storage Unit No."),
-                "Entry Type" = const(Rent)));
+                "Entry Type" = const("Rental Fees")));
             Editable = false;
         }
-        field(7; "Current Deposit"; Decimal)
-        {
-            Caption = 'Current Deposit';
-            FieldClass = FlowField;
-            CalcFormula = sum("Storage Ledger Entry".Amount where(
-                "Storage Unit No." = field("Storage Unit No."),
-                "Entry Type" = const(Deposit)));
-            Editable = false;
-        }
-
-        field(8; "No. Series"; Code[20])
+        field(7; "No. Series"; Code[20])
         {
             Caption = 'No. Series';
             Editable = false;

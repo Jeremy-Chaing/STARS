@@ -119,10 +119,11 @@ page 99950 "Rental Contract Card"
                     StorageJournal: Record "Storage Journal";
                     ConfirmMsg: Label '確定要為合約 %1 建立押金紀錄嗎?';
                     DuplicateErr: Label '合約 %1 已經有押金紀錄存在。';
+                    SuccessMsg: Label '已成功為合約 %1 建立押金紀錄。';
                 begin
                     // 檢查是否已存在相同合約編號的押金紀錄
                     StorageJournal.SetRange("Contract No.", Rec."Contract No.");
-                    StorageJournal.SetRange("Entry Type", Enum::"Storage Journal Entry Type"::"Deposits");
+                    StorageJournal.SetRange("Entry Type", Enum::"Storage Entry Type"::"Deposits");
                     if StorageJournal.FindFirst() then
                         Error(DuplicateErr, Rec."Contract No.");
 
@@ -137,10 +138,13 @@ page 99950 "Rental Contract Card"
                     //StorageJournal.Description := 'Rental Contract Deposit';
                     StorageJournal."Date of Transaction" := Today();
                     StorageJournal.Amount := Rec."Deposit Amount";
-                    StorageJournal."Entry Type" := Enum::"Storage Journal Entry Type"::"Deposits";
+                    StorageJournal."Entry Type" := Enum::"Storage Entry Type"::"Deposits";
                     //StorageJournal."Payment Date" := Today();
 
                     StorageJournal.Insert();
+
+                    // 顯示成功訊息
+                    Message(SuccessMsg, Rec."Contract No.");
                 end;
             }
         }

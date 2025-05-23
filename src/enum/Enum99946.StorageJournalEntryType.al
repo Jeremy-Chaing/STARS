@@ -1,14 +1,14 @@
-enum 99946 "Storage Journal Entry Type"
+enum 99946 "Storage Entry Type"
 {
     Extensible = true;
 
-    value(0; Deposits)
-    {
-        Caption = 'Deposits';
-    }
-    value(1; "Rental Fees")
+    value(0; "Rental Fees")
     {
         Caption = 'Rental Fees';
+    }
+    value(1; Deposits)
+    {
+        Caption = 'Deposits';
     }
     value(2; "Return Deposits")
     {

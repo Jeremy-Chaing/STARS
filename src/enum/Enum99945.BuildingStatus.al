@@ -10,8 +10,4 @@ enum 99945 "Building Status"
     {
         Caption = 'Inactive';
     }
-    value(2; "Under Construction")
-    {
-        Caption = 'Under Construction';
-    }
 }

@@ -24,8 +24,6 @@ codeunit 99942 "Stor. Jnl. Line-Post Line"
         // Create ledger entry using TransferFields
         StorageLedgerEntry.Init();
         StorageLedgerEntry.TransferFields(StorageJournalLine, false); // false means don't validate
-        StorageLedgerEntry."Entry Type" := ConvertEntryType(StorageJournalLine."Entry Type");
-        StorageLedgerEntry."Date of Transaction" := WorkDate();
 
         OnBeforeInsertLedgerEntry(StorageLedgerEntry, StorageJournalLine);
 
@@ -44,20 +42,6 @@ codeunit 99942 "Stor. Jnl. Line-Post Line"
         OnAfterInsertLedgerEntry(StorageLedgerEntry, StorageJournalLine);
 
         exit(IsSuccess);
-    end;
-
-    local procedure ConvertEntryType(JournalEntryType: Enum "Storage Journal Entry Type"): Enum "Storage Ledger Entry Type"
-    begin
-        case JournalEntryType of
-            JournalEntryType::Deposits:
-                exit("Storage Ledger Entry Type"::Deposit);
-            JournalEntryType::"Return Deposits":
-                exit("Storage Ledger Entry Type"::"Return Deposit");
-            JournalEntryType::"Rental Fees":
-                exit("Storage Ledger Entry Type"::Rent);
-            else
-                Error('Unsupported journal entry type: %1', Format(JournalEntryType));
-        end;
     end;
 
     local procedure UpdateStatistics(StorageJournalLine: Record "Storage Journal")
