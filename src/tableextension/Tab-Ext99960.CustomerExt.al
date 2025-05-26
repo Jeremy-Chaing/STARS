@@ -2,9 +2,9 @@ tableextension 99960 "Customer Ext" extends Customer
 {
     fields
     {
-        field(99940; "Auto Post Journals"; Boolean)
+        field(99940; "Auto Post Storage Journals"; Boolean)
         {
-            Caption = 'Auto Post Journals';
+            Caption = 'Auto Post Storage Journals';
             DataClassification = CustomerContent;
         }
         field(99941; "Total Outstanding Amount"; Decimal)
