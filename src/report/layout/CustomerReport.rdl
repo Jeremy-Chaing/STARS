@@ -11,7 +11,7 @@
       <am:Name>PBIRB</am:Name>
       <am:Version>15.7.1814.616</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-05-23T09:59:22.3408976Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2025-05-26T02:49:23.0456179Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -54,6 +54,9 @@
         </Field>
         <Field Name="ContractStatus">
           <DataField>ContractStatus</DataField>
+        </Field>
+        <Field Name="PrintDetails">
+          <DataField>PrintDetails</DataField>
         </Field>
         <Field Name="StorageUnitNo1">
           <DataField>StorageUnitNo1</DataField>
@@ -336,7 +339,6 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <rd:Selected>true</rd:Selected>
                         <Textbox Name="StorageUnitNo">
                           <rd:DefaultName>StorageUnitNo</rd:DefaultName>
                           <CanGrow>true</CanGrow>
@@ -352,9 +354,6 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <Visibility>
-                            <Hidden>=IIF(Parameters!PrintDetails.Value = FALSE, TRUE, FALSE)</Hidden>
-                          </Visibility>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -568,6 +567,7 @@
                                 <TextRun>
                                   <Value>Customer Total Count:</Value>
                                   <Style>
+                                    <FontSize>11pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -603,7 +603,10 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Count(Fields!StorageUnitNo.Value)</Value>
-                                  <Style />
+                                  <Style>
+                                    <FontSize>11pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -1128,6 +1131,9 @@
                         <TablixMember />
                         <TablixMember />
                       </TablixMembers>
+                      <Visibility>
+                        <Hidden>=Not Fields!PrintDetails.Value</Hidden>
+                      </Visibility>
                     </TablixMember>
                     <TablixMember>
                       <KeepWithGroup>Before</KeepWithGroup>
@@ -1294,7 +1300,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>ACITVE CUSTOMER LIST</Value>
+                      <Value>CUSTOMER LIST</Value>
                       <Style>
                         <FontSize>30pt</FontSize>
                         <FontWeight>Bold</FontWeight>

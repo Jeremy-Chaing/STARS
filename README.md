@@ -41,7 +41,7 @@ Athens U-Store 是一家位於美國喬治亞州的自助倉儲租賃公司，�
 
 - 列出所有客戶及其相關的倉儲單元。
 - 提供詳細或摘要格式列印選項。
-- 支援篩選 **Customer No.**、**Customer City** 和 **Date**。
+- 支援篩選 **Customer No.**、**Customer City** 。
 
 ### 6. FlowFields 設定
 

@@ -42,6 +42,9 @@ report 99970 CustomerReport
                 column(ContractStatus; "Contract Status")
                 {
                 }
+                column(PrintDetails; PrintDetails)
+                {
+                }
 
                 dataitem(StorageUnit; "Storage Unit")
                 {
@@ -79,6 +82,7 @@ report 99970 CustomerReport
             {
                 group(Options)
                 {
+                    Caption = 'Options';
                     field(PrintDetails; PrintDetails)
                     {
                         ApplicationArea = All;
@@ -88,6 +92,7 @@ report 99970 CustomerReport
                 }
             }
         }
+
         actions
         {
             area(Processing)
@@ -98,4 +103,10 @@ report 99970 CustomerReport
 
     var
         PrintDetails: Boolean;
+
+
+    procedure InitializeRequest(ShowDetails: Boolean)
+    begin
+        PrintDetails := ShowDetails;
+    end;
 }
