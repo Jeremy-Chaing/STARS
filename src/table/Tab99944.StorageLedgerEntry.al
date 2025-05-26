@@ -51,9 +51,9 @@ table 99944 "Storage Ledger Entry"
             Caption = 'Entry Type';
             DataClassification = CustomerContent;
         }
-        field(9; "Payment Date"; Date)
+        field(9; "Posting Date"; Date)
         {
-            Caption = 'Payment Date';
+            Caption = 'Posting Date';
             DataClassification = CustomerContent;
         }
     }

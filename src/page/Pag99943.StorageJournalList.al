@@ -91,11 +91,6 @@ page 99943 "Storage Journal List"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the amount of the journal entry.';
                 }
-                field("Payment Date"; Rec."Payment Date")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the payment date.';
-                }
             }
         }
     }

@@ -49,11 +49,6 @@ table 99943 "Storage Journal"
             Caption = 'Entry Type';
             DataClassification = CustomerContent;
         }
-        field(9; "Payment Date"; Date)
-        {
-            Caption = 'Payment Date';
-            DataClassification = CustomerContent;
-        }
     }
 
     keys

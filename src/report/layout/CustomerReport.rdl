@@ -24,55 +24,6 @@
       <rd:DataSourceID>aab53568-161e-437a-b52a-c7b8bcb51659</rd:DataSourceID>
     </DataSource>
   </DataSources>
-  <DataSets>
-    <DataSet Name="DataSet_Result">
-      <Query>
-        <DataSourceName>DataSource</DataSourceName>
-        <CommandText />
-      </Query>
-      <Fields>
-        <Field Name="No">
-          <DataField>No</DataField>
-        </Field>
-        <Field Name="Name">
-          <DataField>Name</DataField>
-        </Field>
-        <Field Name="City">
-          <DataField>City</DataField>
-        </Field>
-        <Field Name="ContractNo">
-          <DataField>ContractNo</DataField>
-        </Field>
-        <Field Name="StartDate">
-          <DataField>StartDate</DataField>
-        </Field>
-        <Field Name="EndDate">
-          <DataField>EndDate</DataField>
-        </Field>
-        <Field Name="StorageUnitNo">
-          <DataField>StorageUnitNo</DataField>
-        </Field>
-        <Field Name="ContractStatus">
-          <DataField>ContractStatus</DataField>
-        </Field>
-        <Field Name="PrintDetails">
-          <DataField>PrintDetails</DataField>
-        </Field>
-        <Field Name="StorageUnitNo1">
-          <DataField>StorageUnitNo1</DataField>
-        </Field>
-        <Field Name="StorageUnitDescription">
-          <DataField>StorageUnitDescription</DataField>
-        </Field>
-        <Field Name="BuildingNo">
-          <DataField>BuildingNo</DataField>
-        </Field>
-        <Field Name="BuildingDescription">
-          <DataField>BuildingDescription</DataField>
-        </Field>
-      </Fields>
-    </DataSet>
-  </DataSets>
   <ReportSections>
     <ReportSection>
       <Body>
@@ -1354,12 +1305,6 @@
       </Page>
     </ReportSection>
   </ReportSections>
-  <ReportParametersLayout>
-    <GridLayoutDefinition>
-      <NumberOfColumns>4</NumberOfColumns>
-      <NumberOfRows>2</NumberOfRows>
-    </GridLayoutDefinition>
-  </ReportParametersLayout>
   <Code>Public Function BlankZero(ByVal Value As Decimal)
     if Value = 0 then
         Return ""
@@ -1397,4 +1342,53 @@ End Function
 </Code>
   <Language>=User!Language</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="No">
+          <DataField>No</DataField>
+        </Field>
+        <Field Name="Name">
+          <DataField>Name</DataField>
+        </Field>
+        <Field Name="City">
+          <DataField>City</DataField>
+        </Field>
+        <Field Name="ContractNo">
+          <DataField>ContractNo</DataField>
+        </Field>
+        <Field Name="StartDate">
+          <DataField>StartDate</DataField>
+        </Field>
+        <Field Name="EndDate">
+          <DataField>EndDate</DataField>
+        </Field>
+        <Field Name="StorageUnitNo">
+          <DataField>StorageUnitNo</DataField>
+        </Field>
+        <Field Name="ContractStatus">
+          <DataField>ContractStatus</DataField>
+        </Field>
+        <Field Name="PrintDetails">
+          <DataField>PrintDetails</DataField>
+        </Field>
+        <Field Name="StorageUnitNo1">
+          <DataField>StorageUnitNo1</DataField>
+        </Field>
+        <Field Name="StorageUnitDescription">
+          <DataField>StorageUnitDescription</DataField>
+        </Field>
+        <Field Name="BuildingNo">
+          <DataField>BuildingNo</DataField>
+        </Field>
+        <Field Name="BuildingDescription">
+          <DataField>BuildingDescription</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
 </Report>

@@ -44,6 +44,11 @@ page 99941 "Storage Unit List"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the total rental income received for this storage unit.';
                 }
+                field("Average Deposit"; Rec."Average Deposit")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the average deposit for this storage unit.';
+                }
             }
         }
     }

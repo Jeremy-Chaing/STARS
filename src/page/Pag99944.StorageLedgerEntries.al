@@ -53,6 +53,11 @@ page 99944 "Storage Ledger Entries"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the type of the ledger entry.';
                 }
+                field("Posting Date"; Rec."Posting Date")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the posting date.';
+                }
             }
         }
     }

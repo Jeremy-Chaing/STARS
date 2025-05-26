@@ -23,7 +23,8 @@ codeunit 99942 "Stor. Jnl. Line-Post Line"
 
         // Create ledger entry using TransferFields
         StorageLedgerEntry.Init();
-        StorageLedgerEntry.TransferFields(StorageJournalLine, false); // false means don't validate
+        StorageLedgerEntry.TransferFields(StorageJournalLine, false);
+        StorageLedgerEntry."Posting Date" := Today();
 
         OnBeforeInsertLedgerEntry(StorageLedgerEntry, StorageJournalLine);
 

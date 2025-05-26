@@ -1,4 +1,4 @@
-report 99970 CustomerReport
+report 99970 "Customer Report"
 {
     ApplicationArea = All;
     Caption = 'CustomerReport';

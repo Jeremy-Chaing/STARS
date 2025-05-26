@@ -59,6 +59,15 @@ table 99940 "Storage Unit"
             Editable = false;
             TableRelation = "No. Series";
         }
+        field(8; "Average Deposit"; Decimal)
+        {
+            Caption = 'Average Deposit';
+            FieldClass = FlowField;
+            CalcFormula = average("Storage Ledger Entry".Amount where(
+                "Storage Unit No." = field("Storage Unit No."),
+                "Entry Type" = const(Deposits)));
+            Editable = false;
+        }
     }
 
     keys
