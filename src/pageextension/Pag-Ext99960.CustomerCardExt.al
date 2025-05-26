@@ -22,7 +22,7 @@ pageextension 99960 "Customer Card Ext" extends "Customer Card"
         }
         addlast(Invoicing)
         {
-            field("Auto Post Journals"; Rec."Auto Post Journals")
+            field("Auto Post Storage Journals"; Rec."Auto Post Storage Journals")
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies whether storage journals should be automatically posted for this customer.';
