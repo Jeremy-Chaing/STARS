@@ -2,8 +2,8 @@ table 99950 "Rental Contract"
 {
     Caption = 'Rental Contract';
     DataClassification = CustomerContent;
-    LookupPageId = "Rental Contract List";
-    DrillDownPageId = "Rental Contract Card";
+    LookupPageId = "Rental Contracts";
+    DrillDownPageId = "Rental Contract";
 
     fields
     {

@@ -2,8 +2,8 @@ table 99940 "Storage Unit"
 {
     Caption = 'Storage Unit';
     DataClassification = CustomerContent;
-    LookupPageId = "Storage Unit List";
-    DrillDownPageId = "Storage Unit List";
+    // LookupPageId = "Storage Units";
+    // DrillDownPageId = "Storage Units";
 
     fields
     {
@@ -68,6 +68,7 @@ table 99940 "Storage Unit"
                 "Entry Type" = const(Deposits)));
             Editable = false;
         }
+
     }
 
     keys
@@ -77,6 +78,15 @@ table 99940 "Storage Unit"
             Clustered = true;
         }
     }
+
+    fieldgroups
+    {
+        fieldgroup(DropDown; "Storage Unit No.", "Building No.", Description, "Square Footage", "Monthly Rental Fee")
+        {
+            Caption = 'Storage Unit';
+        }
+    }
+
     var
         NoSeries: Codeunit "No. Series";
 
@@ -92,6 +102,7 @@ table 99940 "Storage Unit"
             "Storage Unit No." := NoSeries.GetNextNo("No. Series", WorkDate());
         end;
     end;
+
 
     procedure AssistEdit(OldContract: Record "Storage Unit"): Boolean
     var
@@ -109,4 +120,6 @@ table 99940 "Storage Unit"
             exit(true);
         end;
     end;
+
+
 }

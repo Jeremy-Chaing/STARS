@@ -11,7 +11,6 @@ table 99944 "Storage Ledger Entry"
         {
             Caption = 'Entry No.';
             DataClassification = CustomerContent;
-            AutoIncrement = true;
         }
         field(2; "Contract No."; Code[20])
         {
@@ -51,7 +50,12 @@ table 99944 "Storage Ledger Entry"
             Caption = 'Entry Type';
             DataClassification = CustomerContent;
         }
-        field(9; "Posting Date"; Date)
+        field(9; "Job Queue Created"; Boolean)
+        {
+            Caption = 'Job Queue Created';
+            DataClassification = CustomerContent;
+        }
+        field(10; "Posting Date"; Date)
         {
             Caption = 'Posting Date';
             DataClassification = CustomerContent;

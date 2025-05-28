@@ -11,7 +11,9 @@ tableextension 99960 "Customer Ext" extends Customer
         {
             Caption = 'Total Outstanding Amount';
             FieldClass = FlowField;
-            CalcFormula = sum("Storage Ledger Entry".Amount where("Customer No." = field("No.")));
+            CalcFormula = sum("Storage Ledger Entry".Amount where(
+                "Customer No." = field("No."),
+                "Entry Type" = filter("Rental Fees Payment" | "Rental Fees")));
             Editable = false;
         }
         field(99942; "Total Deposits"; Decimal)
@@ -32,7 +34,18 @@ tableextension 99960 "Customer Ext" extends Customer
                 "Entry Type" = const("Rental Fees")));
             Editable = false;
         }
-        field(99944; "Active Storage Units"; Integer)
+
+        field(99944; "Total Rental Fees Payment"; Decimal)
+        {
+            Caption = 'Total Rental Fees Payment';
+            FieldClass = FlowField;
+            CalcFormula = sum("Storage Ledger Entry".Amount where(
+                "Customer No." = field("No."),
+                "Entry Type" = const("Rental Fees Payment")));
+            Editable = false;
+        }
+
+        field(99945; "Active Storage Units"; Integer)
         {
             Caption = 'Active Storage Units';
             FieldClass = FlowField;
@@ -41,7 +54,7 @@ tableextension 99960 "Customer Ext" extends Customer
                 "Contract Status" = const(Active)));
             Editable = false;
         }
-        field(99945; "Average Deposit"; Decimal)
+        field(99946; "Average Deposit"; Decimal)
         {
             Caption = 'Average Deposit';
             FieldClass = FlowField;

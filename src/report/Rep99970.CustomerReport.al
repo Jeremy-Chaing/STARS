@@ -11,6 +11,9 @@ report 99970 "Customer Report"
         {
             PrintOnlyIfDetail = true;
             RequestFilterFields = "No.", "Name", City;
+            column(CompanyName; CompanyDisplayName)
+            {
+            }
             column(No; "No.")
             {
             }
@@ -68,6 +71,11 @@ report 99970 "Customer Report"
                         column(BuildingDescription; Description)
                         {
                         }
+
+                        trigger OnAfterGetRecord()
+                        begin
+                            CompanyDisplayName := CompanyProperty.DisplayName();
+                        end;
                     }
                 }
             }
@@ -103,6 +111,7 @@ report 99970 "Customer Report"
 
     var
         PrintDetails: Boolean;
+        CompanyDisplayName: Text;
 
 
     procedure InitializeRequest(ShowDetails: Boolean)

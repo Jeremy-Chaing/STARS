@@ -16,12 +16,12 @@ codeunit 99943 "Stor. Jnl. Line-Post Batch"
         Window: Dialog;
         LineCount: Integer;
         Text001: Label 'Posting lines  #1######';
-        PostErrText: Label 'An error occurred while posting the journal lines.';
         NoSelectErrText: Label 'No lines selected for posting.';
+        SuccessMsg: Label '已成功過帳 %1 筆分錄。';
 
     local procedure "Code"()
     var
-        ErrorOccurred: Boolean;
+        ErrorText: Text;
     begin
         if StorageJnlLine.IsEmpty then
             Error(NoSelectErrText);
@@ -35,7 +35,8 @@ codeunit 99943 "Stor. Jnl. Line-Post Batch"
             exit;
 
         repeat
-            StorageCheckLine.RunCheck(StorageJnlLine);
+            if not StorageCheckLine.RunCheck(StorageJnlLine, ErrorText) then
+                Error('合約 %1 檢查失敗：%2', StorageJnlLine."Contract No.", ErrorText);
             LineCount += 1;
             Window.Update(1, LineCount);
         until StorageJnlLine.Next() = 0;
@@ -45,10 +46,8 @@ codeunit 99943 "Stor. Jnl. Line-Post Batch"
         StorageJnlLine.FindSet();
 
         repeat
-            if not PostLine(StorageJnlLine) then begin
-                ErrorOccurred := true;
-                break;
-            end;
+            if not PostLine(StorageJnlLine, ErrorText) then
+                Error('合約 %1 過帳失敗：%2', StorageJnlLine."Contract No.", ErrorText);
             LineCount += 1;
             Window.Update(1, LineCount);
         until StorageJnlLine.Next() = 0;
@@ -57,17 +56,13 @@ codeunit 99943 "Stor. Jnl. Line-Post Batch"
 
         Window.Close();
 
-        if ErrorOccurred then
-            Error(PostErrText);
+        if LineCount > 0 then
+            Message(SuccessMsg, LineCount);
     end;
 
-    local procedure PostLine(var StorageJournalLine: Record "Storage Journal"): Boolean
-    var
-        Success: Boolean;
+    local procedure PostLine(var StorageJournalLine: Record "Storage Journal"; var ErrorText: Text): Boolean
     begin
-        Success := true;
-        StoragePostLine.RunPostLine(StorageJournalLine);
-        exit(Success);
+        exit(StoragePostLine.RunPostLine(StorageJournalLine, ErrorText));
     end;
 
     local procedure DeletePostedLines(SelectionFilter: Text)

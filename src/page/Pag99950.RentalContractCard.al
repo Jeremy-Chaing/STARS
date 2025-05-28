@@ -1,8 +1,8 @@
-page 99950 "Rental Contract Card"
+page 99950 "Rental Contract"
 {
     PageType = Card;
     SourceTable = "Rental Contract";
-    Caption = 'Rental Contract Card';
+    Caption = 'Rental Contract';
     Editable = true;
     layout
     {
@@ -29,6 +29,7 @@ page 99950 "Rental Contract Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the storage unit number.';
+
                     //當Storage Unit No.被改變時，顯示所選Storage Unit的Square Footage 
                     trigger OnValidate()
                     var
@@ -104,10 +105,10 @@ page 99950 "Rental Contract Card"
     {
         area(Processing)
         {
-            action(CreateJournal)
+            action(CreateDepositJournal)
             {
                 ApplicationArea = All;
-                Caption = 'Create Journal';
+                Caption = 'Create Deposit Journal';
                 //Image = NewJournal;
                 Promoted = true;
                 PromotedCategory = Process;
@@ -120,6 +121,7 @@ page 99950 "Rental Contract Card"
                     ConfirmMsg: Label '確定要為合約 %1 建立押金紀錄嗎?';
                     DuplicateErr: Label '合約 %1 已經有押金紀錄存在。';
                     SuccessMsg: Label '已成功為合約 %1 建立押金紀錄。';
+                    ConfirmQst: Label '確定要為合約 %1 建立押金紀錄嗎?';
                 begin
                     // 檢查是否已存在相同合約編號的押金紀錄
                     StorageJournal.SetRange("Contract No.", Rec."Contract No.");
@@ -131,20 +133,73 @@ page 99950 "Rental Contract Card"
                     if not Confirm(ConfirmMsg, false, Rec."Contract No.") then
                         exit;
 
+                    StorageJournal.Reset();
+                    if StorageJournal.FindLast() then
+                        StorageJournal."Line No." := StorageJournal."Line No." + 10000
+                    else
+                        StorageJournal."Line No." := 10000;
+
                     StorageJournal.Init();
                     StorageJournal."Contract No." := Rec."Contract No.";
                     StorageJournal."Storage Unit No." := Rec."Storage Unit No.";
                     StorageJournal."Customer No." := Rec."Customer No.";
-                    //StorageJournal.Description := 'Rental Contract Deposit';
+                    StorageJournal.Description := '合約押金';
                     StorageJournal."Date of Transaction" := Today();
                     StorageJournal.Amount := Rec."Deposit Amount";
                     StorageJournal."Entry Type" := Enum::"Storage Entry Type"::"Deposits";
-                    //StorageJournal."Payment Date" := Today();
 
-                    StorageJournal.Insert();
+                    StorageJournal.Insert(true);
 
                     // 顯示成功訊息
                     Message(SuccessMsg, Rec."Contract No.");
+                    CurrPage.Update(false);
+                end;
+            }
+            action(CreateRentalFeesPayment)
+            {
+                ApplicationArea = All;
+                Caption = 'Create Rental Fees Payment';
+                //Image = NewJournal;
+                Promoted = true;
+
+                trigger OnAction()
+                var
+                    StorageJournal: Record "Storage Journal";
+                    ConfirmMsg: Label '確定要為合約 %1 建立租金付款紀錄嗎?';
+                    DuplicateErr: Label '合約 %1 已經有租金付款紀錄存在。';
+                    SuccessMsg: Label '已成功為合約 %1 建立租金付款紀錄。';
+                    ConfirmQst: Label '確定要為合約 %1 建立租金付款紀錄嗎?';
+                begin
+                    // 檢查是否已存在相同合約編號的下個月租金付款紀錄
+                    StorageJournal.SetRange("Contract No.", Rec."Contract No.");
+                    StorageJournal.SetRange("Entry Type", Enum::"Storage Entry Type"::"Rental Fees");
+                    if StorageJournal.FindFirst() then
+                        Error(DuplicateErr, Rec."Contract No.");
+
+                    // 顯示確認對話框
+                    if not Confirm(ConfirmMsg, false, Rec."Contract No.") then
+                        exit;
+
+                    StorageJournal.Reset();
+                    if StorageJournal.FindLast() then
+                        StorageJournal."Line No." := StorageJournal."Line No." + 10000
+                    else
+                        StorageJournal."Line No." := 10000;
+
+                    StorageJournal.Init();
+                    StorageJournal."Contract No." := Rec."Contract No.";
+                    StorageJournal."Storage Unit No." := Rec."Storage Unit No.";
+                    StorageJournal."Customer No." := Rec."Customer No.";
+                    StorageJournal.Description := '合約租金';
+                    StorageJournal."Date of Transaction" := Rec."End Date";
+                    StorageJournal.Amount := Rec."Monthly Rental Fee";
+                    StorageJournal."Entry Type" := Enum::"Storage Entry Type"::"Rental Fees";
+
+                    StorageJournal.Insert(true);
+
+                    // 顯示成功訊息
+                    Message(SuccessMsg, Rec."Contract No.");
+                    CurrPage.Update(false);
                 end;
             }
         }

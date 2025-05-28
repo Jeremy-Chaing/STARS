@@ -1,12 +1,12 @@
-page 99951 "Rental Contract List"
+page 99951 "Rental Contracts"
 {
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Lists;
     SourceTable = "Rental Contract";
-    CardPageId = "Rental Contract Card";
+    CardPageId = "Rental Contract";
     Editable = false;
-    Caption = 'Rental Contract List';
+    Caption = 'Rental Contracts';
     DelayedInsert = true;
 
     layout

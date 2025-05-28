@@ -14,4 +14,8 @@ enum 99946 "Storage Entry Type"
     {
         Caption = 'Return Deposits';
     }
+    value(3; "Rental Fees Payment")
+    {
+        Caption = 'Rental Fees Payment';
+    }
 }

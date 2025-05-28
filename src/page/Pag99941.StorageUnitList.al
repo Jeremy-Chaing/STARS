@@ -1,12 +1,12 @@
-page 99941 "Storage Unit List"
+page 99941 "Storage Units"
 {
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Lists;
     SourceTable = "Storage Unit";
-    CardPageId = "Storage Unit Card";
+    CardPageId = "Storage Unit";
     Editable = false;
-    Caption = 'Storage Unit List';
+    Caption = 'Storage Units';
 
     layout
     {

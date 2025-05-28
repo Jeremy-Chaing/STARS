@@ -1,10 +1,11 @@
-page 99943 "Storage Journal List"
+page 99943 "Storage Journals"
 {
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Lists;
     SourceTable = "Storage Journal";
-    Caption = 'Storage Journal List';
+    Caption = 'Storage Journals';
+    AutoSplitKey = true;
 
     layout
     {
@@ -12,10 +13,11 @@ page 99943 "Storage Journal List"
         {
             repeater(GroupName)
             {
-                field("Entry No."; Rec."Entry No.")
+                field("Line No."; Rec."Line No.")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the entry number.';
+                    //Visible = false;
                 }
                 field("Contract No."; Rec."Contract No.")
                 {
@@ -90,6 +92,12 @@ page 99943 "Storage Journal List"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the amount of the journal entry.';
+                }
+                field("Job Queue Created"; Rec."Job Queue Created")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies if the job queue was created.';
+                    Editable = false;
                 }
             }
         }

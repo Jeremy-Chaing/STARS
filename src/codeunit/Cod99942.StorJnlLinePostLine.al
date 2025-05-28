@@ -5,18 +5,17 @@ codeunit 99942 "Stor. Jnl. Line-Post Line"
     TableNo = "Storage Journal";
 
     trigger OnRun()
+    var
+        ErrorText: Text;
     begin
-        RunPostLine(Rec);
+        RunPostLine(Rec, ErrorText);
     end;
 
-    procedure RunPostLine(var StorageJournalLine: Record "Storage Journal"): Boolean
+    procedure RunPostLine(var StorageJournalLine: Record "Storage Journal"; var ErrorText: Text): Boolean
     var
         StorageLedgerEntry: Record "Storage Ledger Entry";
         IsSuccess: Boolean;
     begin
-        if not StorageJournalLine.Get(StorageJournalLine."Entry No.") then
-            Error('Journal line with Entry No. %1 not found.', StorageJournalLine."Entry No.");
-
         // Start transaction
         IsSuccess := false;
         StorageLedgerEntry.LockTable();
@@ -24,20 +23,30 @@ codeunit 99942 "Stor. Jnl. Line-Post Line"
         // Create ledger entry using TransferFields
         StorageLedgerEntry.Init();
         StorageLedgerEntry.TransferFields(StorageJournalLine, false);
+        if GetMaxEntryNo() = 0 then
+            StorageLedgerEntry."Entry No." := 10000
+        else
+            StorageLedgerEntry."Entry No." := GetMaxEntryNo() + 10000;
         StorageLedgerEntry."Posting Date" := Today();
+        StorageLedgerEntry."Job Queue Created" := false;
 
         OnBeforeInsertLedgerEntry(StorageLedgerEntry, StorageJournalLine);
 
         // Insert ledger entry within transaction scope
-        if not StorageLedgerEntry.Insert(true) then
-            Error('Failed to insert ledger entry.');
+        if not StorageLedgerEntry.Insert(true) then begin
+            ErrorText := GetLastErrorText();
+            exit(false);
+        end;
 
         // Update statistics (optimized)
-        UpdateStatistics(StorageJournalLine);
+        if not UpdateStatistics(StorageJournalLine, ErrorText) then
+            exit(false);
 
         // Delete the journal line after successful posting
-        if not StorageJournalLine.Delete() then
-            Error('Failed to delete journal line after posting.');
+        if not StorageJournalLine.Delete() then begin
+            ErrorText := StrSubstNo('無法刪除已過帳的分錄 %1', StorageJournalLine."Line No.");
+            exit(false);
+        end;
 
         IsSuccess := true;
         OnAfterInsertLedgerEntry(StorageLedgerEntry, StorageJournalLine);
@@ -45,26 +54,30 @@ codeunit 99942 "Stor. Jnl. Line-Post Line"
         exit(IsSuccess);
     end;
 
-    local procedure UpdateStatistics(StorageJournalLine: Record "Storage Journal")
+    local procedure UpdateStatistics(StorageJournalLine: Record "Storage Journal"; var ErrorText: Text): Boolean
     var
         RentalContract: Record "Rental Contract";
     begin
         // Update contract statistics if needed
         if (StorageJournalLine."Contract No." = '') then
-            exit;
+            exit(true);
 
-        if not RentalContract.Get(StorageJournalLine."Contract No.") then
-            exit;
+        if not RentalContract.Get(StorageJournalLine."Contract No.") then begin
+            ErrorText := StrSubstNo('找不到合約 %1', StorageJournalLine."Contract No.");
+            exit(false);
+        end;
 
         // Update description with latest transaction
         RentalContract.Description := StrSubstNo('Last transaction: %1 on %2',
             Format(StorageJournalLine."Entry Type"),
             Format(StorageJournalLine."Date of Transaction"));
 
-        if not RentalContract.Modify() then
-            Error('Failed to update rental contract statistics.');
+        if not RentalContract.Modify() then begin
+            ErrorText := StrSubstNo('無法更新合約 %1 的統計資料', StorageJournalLine."Contract No.");
+            exit(false);
+        end;
 
-        // Note: Removed unnecessary FlowField calculations as they are computed on-demand
+        exit(true);
     end;
 
     local procedure GetMaxEntryNo(): Integer

@@ -6,6 +6,7 @@ page 99944 "Storage Ledger Entries"
     SourceTable = "Storage Ledger Entry";
     //Editable = false;
     Caption = 'Storage Ledger Entries';
+    AutoSplitKey = true;
 
     layout
     {
@@ -17,6 +18,7 @@ page 99944 "Storage Ledger Entries"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the entry number.';
+                    //Visible = false;
                 }
                 field("Contract No."; Rec."Contract No.")
                 {
@@ -57,6 +59,12 @@ page 99944 "Storage Ledger Entries"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the posting date.';
+                }
+                field("Job Queue Created"; Rec."Job Queue Created")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies if the job queue was created.';
+                    Editable = false;
                 }
             }
         }

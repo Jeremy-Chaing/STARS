@@ -5,11 +5,10 @@ table 99943 "Storage Journal"
 
     fields
     {
-        field(1; "Entry No."; Integer)
+        field(1; "Line No."; Integer)
         {
-            Caption = 'Entry No.';
+            Caption = 'Line No.';
             DataClassification = CustomerContent;
-            AutoIncrement = true;
         }
         field(2; "Contract No."; Code[20])
         {
@@ -49,11 +48,16 @@ table 99943 "Storage Journal"
             Caption = 'Entry Type';
             DataClassification = CustomerContent;
         }
+        field(9; "Job Queue Created"; Boolean)
+        {
+            Caption = 'Job Queue Created';
+            DataClassification = CustomerContent;
+        }
     }
 
     keys
     {
-        key(PK; "Entry No.")
+        key(PK; "Line No.")
         {
             Clustered = true;
         }

@@ -1,8 +1,8 @@
-page 99940 "Storage Unit Card"
+page 99940 "Storage Unit"
 {
     PageType = Card;
     SourceTable = "Storage Unit";
-    Caption = 'Storage Unit Card';
+    Caption = 'Storage Unit';
 
     layout
     {
