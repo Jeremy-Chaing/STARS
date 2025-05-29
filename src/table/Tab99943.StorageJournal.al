@@ -53,6 +53,17 @@ table 99943 "Storage Journal"
             Caption = 'Job Queue Created';
             DataClassification = CustomerContent;
         }
+        field(10; "Posting Date"; Date)
+        {
+            Caption = 'Posting Date';
+            DataClassification = CustomerContent;
+        }
+        field(11; "Journal Template Name"; Code[10]) { }
+        field(12; "Journal Batch Name"; Code[10])
+        {
+            TableRelation = "Storage Journal Batch".Name WHERE("Journal Template Name" = FIELD("Journal Template Name"));
+        }
+
     }
 
     keys
@@ -60,6 +71,13 @@ table 99943 "Storage Journal"
         key(PK; "Line No.")
         {
             Clustered = true;
+        }
+    }
+    fieldgroups
+    {
+        fieldgroup(DropDown; "Journal Batch Name", "Description")
+        {
+            Caption = 'Storage Unit';
         }
     }
 }

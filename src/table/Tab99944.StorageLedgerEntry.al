@@ -7,6 +7,7 @@ table 99944 "Storage Ledger Entry"
 
     fields
     {
+
         field(1; "Entry No."; Integer)
         {
             Caption = 'Entry No.';
@@ -59,6 +60,12 @@ table 99944 "Storage Ledger Entry"
         {
             Caption = 'Posting Date';
             DataClassification = CustomerContent;
+        }
+
+        field(11; "Journal Template Name"; Code[10]) { }
+        field(12; "Journal Batch Name"; Code[10])
+        {
+            TableRelation = "Storage Journal Batch".Name WHERE("Journal Template Name" = FIELD("Journal Template Name"));
         }
     }
 

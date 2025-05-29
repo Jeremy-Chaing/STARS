@@ -22,6 +22,52 @@
       <rd:DataSourceID>0397673f-402e-40ec-a027-c91dabbc002e</rd:DataSourceID>
     </DataSource>
   </DataSources>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+      <Fields>
+        <Field Name="CompanyName">
+          <DataField>CompanyName</DataField>
+        </Field>
+        <Field Name="StartingDate">
+          <DataField>StartingDate</DataField>
+        </Field>
+        <Field Name="EndingDate">
+          <DataField>EndingDate</DataField>
+        </Field>
+        <Field Name="StorageUnitNo">
+          <DataField>StorageUnitNo</DataField>
+        </Field>
+        <Field Name="Description">
+          <DataField>Description</DataField>
+        </Field>
+        <Field Name="PrintRentalFeesPayment">
+          <DataField>PrintRentalFeesPayment</DataField>
+        </Field>
+        <Field Name="Customer_No">
+          <DataField>Customer_No</DataField>
+        </Field>
+        <Field Name="Entry_No">
+          <DataField>Entry_No</DataField>
+        </Field>
+        <Field Name="DateOfTransaction">
+          <DataField>DateOfTransaction</DataField>
+        </Field>
+        <Field Name="Amount">
+          <DataField>Amount</DataField>
+        </Field>
+        <Field Name="AmountFormat">
+          <DataField>AmountFormat</DataField>
+        </Field>
+        <Field Name="EntryType">
+          <DataField>EntryType</DataField>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
   <ReportSections>
     <ReportSection>
       <Body>
@@ -1471,7 +1517,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=" To: " &amp; Format(Fields!EndingDate.Value, "yyyy/MM/dd")</Value>
+                      <Value>="To: " &amp; Format(Fields!EndingDate.Value, "yyyy/MM/dd")</Value>
                       <Style>
                         <FontWeight>Normal</FontWeight>
                       </Style>
@@ -1518,6 +1564,12 @@
       </Page>
     </ReportSection>
   </ReportSections>
+  <ReportParametersLayout>
+    <GridLayoutDefinition>
+      <NumberOfColumns>4</NumberOfColumns>
+      <NumberOfRows>2</NumberOfRows>
+    </GridLayoutDefinition>
+  </ReportParametersLayout>
   <Code>Public Function BlankZero(ByVal Value As Decimal)
     if Value = 0 then
         Return ""
@@ -1557,50 +1609,4 @@ End Function
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
   <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
-  <DataSets>
-    <DataSet Name="DataSet_Result">
-      <Fields>
-        <Field Name="CompanyName">
-          <DataField>CompanyName</DataField>
-        </Field>
-        <Field Name="StartingDate">
-          <DataField>StartingDate</DataField>
-        </Field>
-        <Field Name="EndingDate">
-          <DataField>EndingDate</DataField>
-        </Field>
-        <Field Name="StorageUnitNo">
-          <DataField>StorageUnitNo</DataField>
-        </Field>
-        <Field Name="Description">
-          <DataField>Description</DataField>
-        </Field>
-        <Field Name="PrintRentalFeesPayment">
-          <DataField>PrintRentalFeesPayment</DataField>
-        </Field>
-        <Field Name="Customer_No">
-          <DataField>Customer_No</DataField>
-        </Field>
-        <Field Name="Entry_No">
-          <DataField>Entry_No</DataField>
-        </Field>
-        <Field Name="DateOfTransaction">
-          <DataField>DateOfTransaction</DataField>
-        </Field>
-        <Field Name="Amount">
-          <DataField>Amount</DataField>
-        </Field>
-        <Field Name="AmountFormat">
-          <DataField>AmountFormat</DataField>
-        </Field>
-        <Field Name="EntryType">
-          <DataField>EntryType</DataField>
-        </Field>
-      </Fields>
-      <Query>
-        <DataSourceName>DataSource</DataSourceName>
-        <CommandText />
-      </Query>
-    </DataSet>
-  </DataSets>
 </Report>

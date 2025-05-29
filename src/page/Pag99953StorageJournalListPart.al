@@ -1,11 +1,13 @@
-page 99943 "Storage Journals"
+page 99953 "Storage Journals List Part"
 {
-    PageType = List;
-    ApplicationArea = All;
+    PageType = ListPart;
     UsageCategory = Lists;
     SourceTable = "Storage Journal";
     Caption = 'Storage Journals';
     AutoSplitKey = true;
+
+    SourceTableView = WHERE("Journal Template Name" = CONST('STORAGE'),
+                        "Journal Batch Name" = FILTER(<> ''));
     layout
     {
         area(Content)
@@ -99,66 +101,6 @@ page 99943 "Storage Journals"
                     ApplicationArea = All;
                     ToolTip = 'Specifies if the job queue was created.';
                     Editable = false;
-                }
-            }
-        }
-    }
-
-    actions
-    {
-        area(Navigation)
-        {
-            action(New)
-            {
-                ApplicationArea = All;
-                Caption = 'New';
-                Image = New;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedCategory = New;
-                ToolTip = 'Create a new journal entry.';
-
-                trigger OnAction()
-                begin
-                    Clear(Rec);
-                    Rec.Insert(true);
-                end;
-            }
-        }
-        area(Processing)
-        {
-            group(Manage)
-            {
-                Caption = 'Manage';
-
-                action(Post)
-                {
-                    ApplicationArea = All;
-                    Caption = 'Post Selected';
-                    Image = PostDocument;
-                    Promoted = true;
-                    PromotedOnly = true;
-                    PromotedCategory = Process;
-                    ToolTip = 'Post the selected journal entries. Use Ctrl+Click to select multiple entries.';
-                    Scope = Repeater;
-
-                    trigger OnAction()
-                    var
-                        StorageJournal: Record "Storage Journal";
-                        StoragePostBatch: Codeunit "Stor. Jnl. Line-Post Batch";
-                        ConfirmQst: Label 'Do you want to post the selected journal lines?';
-                        NothingSelectedErr: Label 'Please select the lines you want to post.';
-                    begin
-                        CurrPage.SetSelectionFilter(StorageJournal);
-                        if StorageJournal.IsEmpty then
-                            Error(NothingSelectedErr);
-
-                        if not Confirm(ConfirmQst) then
-                            exit;
-
-                        StoragePostBatch.Run(StorageJournal);
-                        CurrPage.Update(false);
-                    end;
                 }
             }
         }
