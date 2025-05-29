@@ -118,8 +118,10 @@ codeunit 99941 "Stor. Jnl. Line-Check Line"
         CurrentMonthStart: Date;
         CurrentMonthEnd: Date;
     begin
-        // 只檢查租金類型的分錄
-        if StorageJournalLine."Entry Type" <> StorageJournalLine."Entry Type"::"Rental Fees" then
+        // 只檢查租金和租金付款類型的分錄
+        if not (StorageJournalLine."Entry Type" in [
+            StorageJournalLine."Entry Type"::"Rental Fees",
+            StorageJournalLine."Entry Type"::"Rental Fees Payment"]) then
             exit(true);
 
         // 計算當月的日期範圍
@@ -129,13 +131,21 @@ codeunit 99941 "Stor. Jnl. Line-Check Line"
         // 檢查是否已有當月的租金記錄
         StorageLedgerEntry.Reset();
         StorageLedgerEntry.SetRange("Contract No.", StorageJournalLine."Contract No.");
-        StorageLedgerEntry.SetRange("Entry Type", StorageLedgerEntry."Entry Type"::"Rental Fees");
+        if StorageJournalLine."Entry Type" = StorageJournalLine."Entry Type"::"Rental Fees" then
+            StorageLedgerEntry.SetRange("Entry Type", StorageLedgerEntry."Entry Type"::"Rental Fees")
+        else
+            StorageLedgerEntry.SetRange("Entry Type", StorageLedgerEntry."Entry Type"::"Rental Fees Payment");
         StorageLedgerEntry.SetRange("Date of Transaction", CurrentMonthStart, CurrentMonthEnd);
 
         if not StorageLedgerEntry.IsEmpty then begin
-            ErrorText := StrSubstNo('合約 %1 已有 %2 的租金記錄',
-                StorageJournalLine."Contract No.",
-                Format(StorageJournalLine."Date of Transaction", 0, '<Month Text> <Year4>'));
+            if StorageJournalLine."Entry Type" = StorageJournalLine."Entry Type"::"Rental Fees" then
+                ErrorText := StrSubstNo('合約 %1 已有 %2 的租金記錄',
+                    StorageJournalLine."Contract No.",
+                    Format(StorageJournalLine."Date of Transaction", 0, '<Month Text> <Year4>'))
+            else
+                ErrorText := StrSubstNo('合約 %1 已有 %2 的租金付款記錄',
+                    StorageJournalLine."Contract No.",
+                    Format(StorageJournalLine."Date of Transaction", 0, '<Month Text> <Year4>'));
             exit(false);
         end;
 

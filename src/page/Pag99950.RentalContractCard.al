@@ -143,7 +143,6 @@ page 99950 "Rental Contract"
                     StorageJournal."Contract No." := Rec."Contract No.";
                     StorageJournal."Storage Unit No." := Rec."Storage Unit No.";
                     StorageJournal."Customer No." := Rec."Customer No.";
-                    StorageJournal.Description := '合約押金';
                     StorageJournal."Date of Transaction" := Today();
                     StorageJournal.Amount := Rec."Deposit Amount";
                     StorageJournal."Entry Type" := Enum::"Storage Entry Type"::"Deposits";
@@ -161,6 +160,8 @@ page 99950 "Rental Contract"
                 Caption = 'Create Rental Fees Payment';
                 //Image = NewJournal;
                 Promoted = true;
+                PromotedCategory = Process;
+                PromotedIsBig = true;
 
                 trigger OnAction()
                 var
@@ -172,9 +173,7 @@ page 99950 "Rental Contract"
                 begin
                     // 檢查是否已存在相同合約編號的下個月租金付款紀錄
                     StorageJournal.SetRange("Contract No.", Rec."Contract No.");
-                    StorageJournal.SetRange("Entry Type", Enum::"Storage Entry Type"::"Rental Fees");
-                    if StorageJournal.FindFirst() then
-                        Error(DuplicateErr, Rec."Contract No.");
+                    StorageJournal.SetRange("Entry Type", Enum::"Storage Entry Type"::"Rental Fees Payment");
 
                     // 顯示確認對話框
                     if not Confirm(ConfirmMsg, false, Rec."Contract No.") then
@@ -190,8 +189,61 @@ page 99950 "Rental Contract"
                     StorageJournal."Contract No." := Rec."Contract No.";
                     StorageJournal."Storage Unit No." := Rec."Storage Unit No.";
                     StorageJournal."Customer No." := Rec."Customer No.";
-                    StorageJournal.Description := '合約租金';
-                    StorageJournal."Date of Transaction" := Rec."End Date";
+                    StorageJournal."Date of Transaction" := Today();
+                    StorageJournal.Amount := -Rec."Monthly Rental Fee";
+                    StorageJournal."Entry Type" := Enum::"Storage Entry Type"::"Rental Fees Payment";
+
+                    StorageJournal.Insert(true);
+
+                    // 顯示成功訊息
+                    Message(SuccessMsg, Rec."Contract No.");
+                    CurrPage.Update(false);
+                end;
+            }
+            action(CreateRentalFees)
+            {
+                ApplicationArea = All;
+                Caption = 'Create Rental Fees';
+                //Image = NewJournal;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedIsBig = true;
+
+                trigger OnAction()
+                var
+                    StorageJournal: Record "Storage Journal";
+                    ConfirmMsg: Label '確定要為合約 %1 建立租金待付款紀錄嗎?';
+                    DuplicateErr: Label '合約 %1 已經有租金待付款紀錄存在。';
+                    SuccessMsg: Label '已成功為合約 %1 建立租金待付款紀錄。';
+                    ConfirmQst: Label '確定要為合約 %1 建立租金待付款紀錄嗎?';
+                begin
+                    // 檢查是否已存在相同合約編號的租金待付款紀錄
+                    StorageJournal.SetRange("Contract No.", Rec."Contract No.");
+                    StorageJournal.SetRange("Entry Type", Enum::"Storage Entry Type"::"Rental Fees");
+                    StorageJournal.SetRange("Date of Transaction", CalcDate('<-CM>', Today()), CalcDate('<CM>', Today()));
+                    if StorageJournal.FindFirst() then
+                        Error(DuplicateErr + ' (%2)', Rec."Contract No.", Format(Today(), 0, '<Month Text> <Year4>'));
+
+                    // 顯示確認對話框
+                    if not Confirm(ConfirmMsg, false, Rec."Contract No.") then
+                        exit;
+
+                    // 顯示確認對話框
+                    if not Confirm(ConfirmMsg, false, Rec."Contract No.") then
+                        exit;
+
+                    // 建立租金待付款紀錄
+                    StorageJournal.Reset();
+                    if StorageJournal.FindLast() then
+                        StorageJournal."Line No." := StorageJournal."Line No." + 10000
+                    else
+                        StorageJournal."Line No." := 10000;
+
+                    StorageJournal.Init();
+                    StorageJournal."Contract No." := Rec."Contract No.";
+                    StorageJournal."Storage Unit No." := Rec."Storage Unit No.";
+                    StorageJournal."Customer No." := Rec."Customer No.";
+                    StorageJournal."Date of Transaction" := Today();
                     StorageJournal.Amount := Rec."Monthly Rental Fee";
                     StorageJournal."Entry Type" := Enum::"Storage Entry Type"::"Rental Fees";
 
